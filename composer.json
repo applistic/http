@@ -1,0 +1,20 @@
+{
+    "name": "applistic/http",
+    "description": "A package for Http requests.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frederic Filosa",
+            "email": "filosa@applistic.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "Applistic\\Http\\": "src/"
+        }
+    }
+}
