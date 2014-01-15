@@ -1,26 +1,43 @@
 <?php
 
-$vendorPath = dirname(__FILE__).DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."vendor";
-require_once($vendorPath.DIRECTORY_SEPARATOR."autoload.php");
+use Applistic\Http\Request;
 
 /**
- * Base test case for Applistic\Http
+ * Tests for the Applistic\Http\Request class.
  *
  * @author Frederic Filosa <filosa@applistic.com>
  * @copyright (c) 2014, applistic.com
  */
-class ApplisticHttpTestCase extends PHPUnit_Framework_TestCase
+class RequestTest extends ApplisticHttpTestCase
 {
 // ===== CONSTANTS =============================================================
-
-    const FULL_URL = "http://username:password@hostname:8080/path/subpath?arg1=value1&arg2=value2#anchor";
-
 // ===== STATIC PROPERTIES =====================================================
 // ===== STATIC FUNCTIONS ======================================================
 // ===== PROPERTIES ============================================================
 // ===== ACCESSORS =============================================================
 // ===== CONSTRUCTOR ===========================================================
 // ===== PUBLIC METHODS ========================================================
+
+    public function testInstanciation()
+    {
+        $request = new Request();
+        $this->assertTrue(is_a($request, "Applistic\Http\Request"));
+    }
+
+    public function testInstanciationWithUrl()
+    {
+        $request = new Request(self::FULL_URL);
+
+        $this->assertTrue(is_a($request, "Applistic\Http\Request"));
+    }
+
+    public function testUrlClass()
+    {
+        $request = new Request(self::FULL_URL);
+
+        $this->assertTrue(is_a($request->url(), "Applistic\Http\Url"));
+    }
+
 // ===== PROTECTED METHODS =====================================================
 // ===== PRIVATE METHODS =======================================================
 }

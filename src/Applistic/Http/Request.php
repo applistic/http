@@ -63,9 +63,9 @@ class Request
     protected $method;
 
     /**
-     * The destination url components.
+     * The destination url object.
      *
-     * @var array
+     * @var Applistic\Http\Url
      */
     protected $url;
 
@@ -100,6 +100,16 @@ class Request
         $this->method = $method;
 
         return $this;
+    }
+
+    /**
+     * Checks if a header is set.
+     *
+     * @return boolean
+     */
+    public function hasHeader($name)
+    {
+        return array_key_exists($name, $this->headers);
     }
 
     /**
@@ -247,55 +257,34 @@ class Request
     }
 
     /**
-     * Returns the url.
+     * Returns the url object.
      *
-     * @return string
+     * Call the build() method to get the URL string:
+     *
+     *     $url = $request->url()->build();
+     *
+     * @return Applistic\Http\Url
      */
     public function url()
     {
-        if (!is_array($this->url)) {
+        if (!is_null($this->url)) {
+            return $this->url;
+        } else {
             return null;
         }
+    }
 
-        if (false && function_exists("http_build_url")) {
-
-            return http_build_url($this->url);
-
+    /**
+     * Sets the url.
+     *
+     * @param string $url
+     */
+    public function setUrl($url)
+    {
+        if (is_null($this->url)) {
+            $this->url = new Url($url);
         } else {
-
-            $url = array();
-
-            if (array_key_exists('scheme', $this->url)) {
-                $url[] = $this->url['scheme']."://";
-            }
-
-            if (array_key_exists('host', $this->url)) {
-                if (array_key_exists('user', $this->url)) {
-                    $url[] = $this->url['user'];
-                    if (array_key_exists('pass', $this->url)) {
-                        $url[] = ":".$this->url['pass'];
-                    }
-                    $url[] = "@";
-                }
-                $url[] = $this->url['host'];
-            }
-
-            if (array_key_exists('path', $this->url)) {
-                $url[] = $this->url['path'];
-            } else {
-                $url[] = "/";
-            }
-
-            if (array_key_exists('query', $this->url)) {
-                $url[] = "?".$this->url['query'];
-            }
-
-            if (array_key_exists('fragment', $this->url)) {
-                $url[] = "#".$this->url['fragment'];
-            }
-
-            return implode("", $url);
-
+            $this->url->setUrl($url);
         }
     }
 
