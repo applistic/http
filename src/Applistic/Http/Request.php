@@ -143,12 +143,14 @@ class Request
      * @param array $headers The new headers.
      * @return  Applistic\Http\Request
      */
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers = null)
     {
         $this->headers = array();
 
-        foreach ($headers as $key => $value) {
-            $this->setHeader($key, $value);
+        if (!is_null($headers)) {
+            foreach ($headers as $key => $value) {
+                $this->setHeader($key, $value);
+            }
         }
 
         return $this;
@@ -245,12 +247,14 @@ class Request
      * @param array $parameters The parameters.
      * @return  Applistic\Http\Request
      */
-    public function setParameters(array $parameters)
+    public function setParameters(array $parameters = null)
     {
         $this->parameters = array();
 
-        foreach ($parameters as $key => $value) {
-            $this->setParameter($key, $value);
+        if (!is_null($parameters)) {
+            foreach ($parameters as $key => $value) {
+                $this->setParameter($key, $value);
+            }
         }
 
         return $this;
@@ -279,13 +283,15 @@ class Request
      *
      * @param string $url
      */
-    public function setUrl($url)
+    public function setUrl($url = null)
     {
         if (is_null($this->url)) {
             $this->url = new Url($url);
         } else {
             $this->url->setUrl($url);
         }
+
+        return $this;
     }
 
 // ===== CONSTRUCTOR ===========================================================
