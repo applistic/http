@@ -1,0 +1,74 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "007f865bc158ccd784e59668e12e6428",
+    "packages": [
+        {
+            "name": "applistic/common",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/applistic/common.git",
+                "reference": "852fcc000df9dd0c5606c55a9339579798008811"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/applistic/common/zipball/852fcc000df9dd0c5606c55a9339579798008811",
+                "reference": "852fcc000df9dd0c5606c55a9339579798008811",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "tests"
+                ],
+                "psr-0": {
+                    "Applistic\\Common\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frederic Filosa",
+                    "email": "filosa@applistic.com"
+                }
+            ],
+            "description": "Provides common utility classes for any type of application.",
+            "keywords": [
+                "array",
+                "collection",
+                "key",
+                "storage",
+                "value"
+            ],
+            "support": {
+                "source": "https://github.com/applistic/common/tree/develop",
+                "issues": "https://github.com/applistic/common/issues"
+            },
+            "time": "2014-01-25 02:54:53"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ],
+    "platform": {
+        "php": ">=5.3.3"
+    },
+    "platform-dev": [
+
+    ]
+}

@@ -10,8 +10,15 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "applistic/common": ">=0.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/applistic/common"
+        }
+    ],
     "autoload": {
         "psr-0": {
             "Applistic\\Http\\": "src/"
