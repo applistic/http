@@ -13,6 +13,23 @@ class Url
 // ===== CONSTANTS =============================================================
 // ===== STATIC PROPERTIES =====================================================
 // ===== STATIC FUNCTIONS ======================================================
+
+    /**
+     * Transforms an array of parameters into a url encoded query string.
+     *
+     * @param  array  $parameters
+     * @return string
+     */
+    public static function makeQueryString(array $parameters)
+    {
+        $p = array();
+        foreach ($parameters as $key => $value) {
+            $encoded = urlencode($value);
+            $p[] = "{$key}={$encoded}";
+        }
+        return implode("&", $p);
+    }
+
 // ===== PROPERTIES ============================================================
 
     /**
@@ -147,12 +164,7 @@ class Url
      */
     public function queryString()
     {
-        $parameters = array();
-        foreach ($this->parameters as $key => $value) {
-            $encoded = urlencode($value);
-            $parameters[] = "{$key}={$encoded}";
-        }
-        return implode("&", $parameters);
+        return static::makeQueryString($this->parameters);
     }
 
     /**
@@ -226,9 +238,43 @@ class Url
         if (is_string($name) && (is_string($value) || is_numeric($value))) {
             $this->parameters[$name] = $value;
             $this->updateComponentsQueryString();
+            return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Sets many parameters to include in the query string.
+     *
+     * @param array $parameters
+     * @return  boolean
+     */
+    public function setParameters(array $parameters = null)
+    {
+        if (is_null($parameters)) {
+
+            $this->parameters = array();
+
+        } else {
+
+            $p = array();
+
+            foreach ($parameters as $name => $value) {
+                if (is_string($name) && (is_string($value) || is_numeric($value))) {
+                    $p[$name] = $value;
+                } else {
+                    return false;
+                }
+            }
+
+            $this->parameters = array_merge($this->parameters, $p);
+
+        }
+
+        $this->updateComponentsQueryString();
+
+        return true;
     }
 
     /**
