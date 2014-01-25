@@ -38,6 +38,25 @@ class RequestTest extends ApplisticHttpTestCase
         $this->assertTrue(is_a($request->url(), "Applistic\Http\Url"));
     }
 
+    public function testSetHeader()
+    {
+        $request = new Request(self::FULL_URL);
+        $key = 'test';
+        $value = 'abcd1234';
+        $request->setHeader($key, $value);
+        $this->assertEquals($value, $request->header($key));
+    }
+
+    public function testUnsetHeader()
+    {
+        $request = new Request(self::FULL_URL);
+        $key = 'test';
+        $value = 'abcd1234';
+        $request->setHeader($key, $value);
+        $request->setHeader($key, null);
+        $this->assertEquals(null, $request->header($key));
+    }
+
 // ===== PROTECTED METHODS =====================================================
 // ===== PRIVATE METHODS =======================================================
 }

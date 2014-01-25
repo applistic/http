@@ -2,6 +2,8 @@
 
 namespace Applistic\Http;
 
+use Applistic\Common\KeyValue;
+
 /**
  * An Http request.
  *
@@ -44,16 +46,16 @@ class Request
     /**
      * The request headers.
      *
-     * @var array
+     * @var Applistic\Common\KeyValue
      */
-    protected $headers = array();
+    protected $headers;
 
     /**
      * The request parameters.
      *
-     * @var array
+     * @var Applistic\Common\KeyValue
      */
-    protected $parameters = array();
+    protected $parameters;
 
     /**
      * The request method.
@@ -103,19 +105,9 @@ class Request
     }
 
     /**
-     * Checks if a header is set.
-     *
-     * @return boolean
-     */
-    public function hasHeader($name)
-    {
-        return array_key_exists($name, $this->headers);
-    }
-
-    /**
      * Returns the headers.
      *
-     * @return array
+     * @return Applistic\Common\KeyValue
      */
     public function headers()
     {
@@ -130,11 +122,7 @@ class Request
      */
     public function header($name)
     {
-        if (array_key_exists($name, $this->headers)) {
-            return $this->headers[$name];
-        } else {
-            return null;
-        }
+        return $this->headers->get($name);
     }
 
     /**
@@ -145,14 +133,7 @@ class Request
      */
     public function setHeaders(array $headers = null)
     {
-        $this->headers = array();
-
-        if (!is_null($headers)) {
-            foreach ($headers as $key => $value) {
-                $this->setHeader($key, $value);
-            }
-        }
-
+        $this->headers = new KeyValue($headers);
         return $this;
     }
 
@@ -165,35 +146,14 @@ class Request
      */
     public function setHeader($name, $value)
     {
-        if (!is_string($name)) {
-            $message = "The header \$name must be a string.";
-            throw new \InvalidArgumentException($message);
-        }
-
-        if (!is_string($value)) {
-            $message = "The header \$value must be a string.";
-            throw new \InvalidArgumentException($message);
-        }
-
-        $this->headers[$name] = $value;
-
+        $this->headers->set($name, $value);
         return $this;
-    }
-
-    /**
-     * Checks if a parameter is set.
-     *
-     * @return boolean
-     */
-    public function hasParameter($name)
-    {
-        return array_key_exists($name, $this->parameters);
     }
 
     /**
      * Returns the parameters.
      *
-     * @return array
+     * @return Applistic\Common\KeyValue
      */
     public function parameters()
     {
@@ -209,16 +169,7 @@ class Request
      */
     public function parameter($name)
     {
-        if (!is_string($name)) {
-            $message = "The parameter \$name must be a string.";
-            throw new \InvalidArgumentException($name);
-        }
-
-        if (array_key_exists($name, $this->parameters)) {
-            return $this->parameters[$name];
-        } else {
-            return null;
-        }
+        return $this->parameters->get($name);
     }
 
     /**
@@ -231,13 +182,7 @@ class Request
      */
     public function setParameter($name, $value)
     {
-        if (!is_string($name)) {
-            $message = "The parameter \$name must be a string.";
-            throw new \InvalidArgumentException($name);
-        }
-
-        $this->parameters[$name] = $value;
-
+        $this->parameters->set($name, $value);
         return $this;
     }
 
@@ -249,14 +194,7 @@ class Request
      */
     public function setParameters(array $parameters = null)
     {
-        $this->parameters = array();
-
-        if (!is_null($parameters)) {
-            foreach ($parameters as $key => $value) {
-                $this->setParameter($key, $value);
-            }
-        }
-
+        $this->parameters = new KeyValue($parameters);
         return $this;
     }
 
@@ -299,6 +237,8 @@ class Request
     public function __construct($baseUrl = null)
     {
         $this->setUrl($baseUrl);
+        $this->headers = new KeyValue();
+        $this->parameters = new KeyValue();
     }
 
 // ===== PUBLIC METHODS ========================================================
