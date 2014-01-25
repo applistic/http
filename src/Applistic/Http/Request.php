@@ -79,7 +79,7 @@ class Request
      *
      * @return string
      */
-    public function getMethod()
+    public function method()
     {
         return $this->method;
     }
