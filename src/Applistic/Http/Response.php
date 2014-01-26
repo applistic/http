@@ -178,12 +178,13 @@ class Response
     /**
      * Returns the response body as a JSON decoded object or array.
      *
+     * @param boolean $asArray Converts objects into arrays. Default is true.
      * @return mixed
      */
-    public function toJson()
+    public function toJson($asArray = true)
     {
         if (is_string($this->body)) {
-            return json_decode($this->body);
+            return json_decode($this->body, $asArray);
         } else {
             return null;
         }
