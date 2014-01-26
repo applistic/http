@@ -47,16 +47,17 @@ class CurlSender extends AbstractSender
             case Request::METHOD_GET:
             case Request::METHOD_DELETE:
             case Request::METHOD_HEAD:
+                curl_setopt($this->curl, CURLOPT_HTTPGET, true);
                 $url->setParameters($parameters);
                 break;
 
             case Request::METHOD_POST:
-                curl_setopt($this->curl, CURLOPT_POST, 1);
+                curl_setopt($this->curl, CURLOPT_POST, true);
                 curl_setopt($this->curl, CURLOPT_POSTFIELDS, $parameters);
                 break;
 
             case Request::METHOD_PUT:
-                curl_setopt($this->curl, CURLOPT_POST, 1);
+                curl_setopt($this->curl, CURLOPT_POST, true);
                 curl_setopt($this->curl, CURLOPT_POSTFIELDS, Url::makeQueryString($parameters));
                 break;
 
@@ -69,11 +70,12 @@ class CurlSender extends AbstractSender
         curl_setopt($this->curl, CURLOPT_HEADER, true);
         curl_setopt($this->curl, CURLOPT_VERBOSE, true);
 
-        $headers = $this->request->headers()->toArray();
-        foreach ($headers as $key => $value) {
-            $h = $key.": ".$value;
-            curl_setopt($this->curl, CURLOPT_HTTPHEADER, $h);
-        }
+        $headers = array();
+        $this->request->headers()->each(function($key, $value) use (&$headers)
+        {
+            $headers[] = $key.": ".$value;
+        });
+        curl_setopt($this->curl, CURLOPT_HTTPHEADER, $headers);
     }
 
     /**
