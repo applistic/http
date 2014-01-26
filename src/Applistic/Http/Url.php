@@ -435,7 +435,7 @@ class Url
         if (is_string($segment) || is_numeric($segment)) {
             $s = $this->trimmedPathSegment($segment);
             if (!empty($s)) {
-                $this->path[] = urlencode($segment);
+                $this->path[] = $segment;
                 $this->updateComponentsPath();
                 return true;
             }
