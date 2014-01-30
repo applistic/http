@@ -6,25 +6,20 @@ use Applistic\Http\Request;
 use Applistic\Http\Response;
 
 /**
- * An Http client that sends and parse REST requests.
+ * An Http client that sends REST requests.
+ *
+ * This is basically a request that embed a sender.
  *
  * @author Frederic Filosa <fred@applistic.com>
  * @copyright (c) 2014, Frederic Filosa
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class Client
+class Client extends Request
 {
 // ===== CONSTANTS =============================================================
 // ===== STATIC PROPERTIES =====================================================
 // ===== STATIC FUNCTIONS ======================================================
 // ===== PROPERTIES ============================================================
-
-    /**
-     * The request.
-     *
-     * @var Applistic\Http\Request
-     */
-    protected $request;
 
     /**
      * Type of the request sender.
@@ -41,60 +36,6 @@ class Client
     protected $sender;
 
 // ===== ACCESSORS =============================================================
-
-    /**
-     * Returns the request.
-     *
-     * @return Applistic\Http\Request
-     */
-    public function request()
-    {
-        return $this->request;
-    }
-
-    /**
-     * Returns the request's headers.
-     *
-     * @return \Applistic\Common\KeyValue
-     */
-    public function headers()
-    {
-        return $this->request->headers();
-    }
-
-    /**
-     * Sets the request's headers.
-     *
-     * @param array $headers
-     * @return  \Applistic\Http\Client\Client
-     */
-    public function setHeaders(array $headers)
-    {
-        $this->request->setHeaders($headers);
-        return $this;
-    }
-
-    /**
-     * Returns the request's parameters.
-     *
-     * @return \Applistic\Common\KeyValue
-     */
-    public function parameters()
-    {
-        return $this->request->parameters();
-    }
-
-    /**
-     * Sets the request's parameters.
-     *
-     * @param array $parameters
-     * @return  \Applistic\Http\Client\Client
-     */
-    public function setParameters(array $parameters)
-    {
-        $this->request->setParameters($parameters);
-        return $this;
-    }
 
     /**
      * Returns the sender.
@@ -133,7 +74,7 @@ class Client
      */
     public function __construct($baseUrl = null, $senderType = 'curl')
     {
-        $this->request = new Request($baseUrl);
+        parent::__construct($baseUrl);
         $this->senderType = $senderType;
     }
 
@@ -146,8 +87,8 @@ class Client
      */
     public function get(array $parameters = null)
     {
-        $this->request->setMethod(Request::METHOD_GET);
-        return $this->executeRequest($this->request, $parameters);
+        $this->setMethod(Request::METHOD_GET);
+        return $this->executeRequest($this, $parameters);
     }
 
     /**
@@ -157,8 +98,8 @@ class Client
      */
     public function post(array $parameters = null)
     {
-        $this->request->setMethod(Request::METHOD_POST);
-        return $this->executeRequest($this->request, $parameters);
+        $this->setMethod(Request::METHOD_POST);
+        return $this->executeRequest($this, $parameters);
     }
 
     /**
@@ -168,8 +109,8 @@ class Client
      */
     public function put(array $parameters = null)
     {
-        $this->request->setMethod(Request::METHOD_PUT);
-        return $this->executeRequest($this->request, $parameters);
+        $this->setMethod(Request::METHOD_PUT);
+        return $this->executeRequest($this, $parameters);
     }
 
     /**
@@ -179,8 +120,8 @@ class Client
      */
     public function delete(array $parameters = null)
     {
-        $this->request->setMethod(Request::METHOD_DELETE);
-        return $this->executeRequest($this->request, $parameters);
+        $this->setMethod(Request::METHOD_DELETE);
+        return $this->executeRequest($this, $parameters);
     }
 
     /**
@@ -192,20 +133,20 @@ class Client
     public function executeRequest(Request $request, array $parameters = null)
     {
         if (is_array($parameters)) {
-            $this->request->setParameters($parameters);
+            $request->setParameters($parameters);
         }
 
-        $response = $this->sender()->sendRequest($this->request);
-        return $this->makeResponse($response);
+        $response = $this->sender()->sendRequest($request);
+        return $this->makeResponse($response, $request);
     }
 
 // ===== PROTECTED METHODS =====================================================
 
-    protected function makeResponse($response)
+    protected function makeResponse($response, Request $request = null)
     {
         if (is_array($response)) {
 
-            $r = new Response(null, $this->request);
+            $r = new Response(null, $request);
 
             if (array_key_exists('body', $response)) {
                 $r->body = $response['body'];
@@ -226,7 +167,7 @@ class Client
 
         } elseif (is_string($response)) {
 
-            $r = new Response();
+            $r = new Response(null, $request);
             $r->body = $response;
             return $r;
 
